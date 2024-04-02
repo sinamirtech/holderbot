@@ -414,8 +414,9 @@ async def holderbot(client: Client, message: Message) :
                                 USER_SUB = DEF_CREATE_USER(MESSAGE_CHATID , USERNAME , DATA , DATE , json.loads(PROXIES) , json.loads(INBOUNDS))
                                 if not "❌" in USER_SUB :
                                     QRCODE_IMG = DEF_CREATE_QRCODE(USER_SUB)
-                                    await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA , DATE) , reply_markup=KEYBOARD_HOME)
-                                    await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
+                                    await client.send_photo(chat_id=MESSAGE_CHATID, photo=QRCODE_IMG, caption=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days </br></br> \n{USER_SUB} </br></b>")
+                                    #await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA , DATE) , reply_markup=KEYBOARD_HOME)
+                                    #await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
                                     UPDATE_STEP = DEF_UPDATE_STEP(MESSAGE_CHATID,"None")
                                 else :
                                     await client.send_message(chat_id=MESSAGE_CHATID , text=USER_SUB , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
@@ -426,8 +427,9 @@ async def holderbot(client: Client, message: Message) :
                                     USER_SUB = DEF_CREATE_USER(MESSAGE_CHATID , USERNAME , DATA , DATE , json.loads(PROXIES) , json.loads(INBOUNDS))
                                     if not "❌" in USER_SUB :
                                         QRCODE_IMG = DEF_CREATE_QRCODE(USER_SUB)
-                                        await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA , DATE) , reply_markup=ReplyKeyboardRemove())
-                                        await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days</b>" , reply_markup=ReplyKeyboardRemove() , parse_mode=enums.ParseMode.HTML)
+                                        await client.send_photo(chat_id=MESSAGE_CHATID, photo=QRCODE_IMG, caption=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days </br></br> \n{USER_SUB} </br></b>")
+                                        #await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA , DATE) , reply_markup=ReplyKeyboardRemove())
+                                        #await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA} GB | {DATE} Days</b>" , reply_markup=ReplyKeyboardRemove() , parse_mode=enums.ParseMode.HTML)
                                     else :
                                         await client.send_message(chat_id=MESSAGE_CHATID , text=USER_SUB , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
                                         UPDATE_STEP = DEF_UPDATE_STEP(MESSAGE_CHATID,"None")
@@ -527,8 +529,9 @@ async def handle_callback_create(client: Client, query: CallbackQuery ):
             await query.message.delete()
             if not "❌" in USER_SUB :
                 QRCODE_IMG = DEF_CREATE_QRCODE(USER_SUB)
-                await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA_LIMIT , DATE_LIMIT) , reply_markup=KEYBOARD_HOME)
-                await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
+                await client.send_photo(chat_id=MESSAGE_CHATID, photo=QRCODE_IMG, caption=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days </br></br> \n{USER_SUB} </br></b>")
+                #await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA_LIMIT , DATE_LIMIT) , reply_markup=KEYBOARD_HOME)
+                #await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
                 UPDATE_STEP = DEF_UPDATE_STEP(MESSAGE_CHATID,"None")
             else :
                 await client.send_message(chat_id=MESSAGE_CHATID , text=USER_SUB , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
@@ -539,8 +542,9 @@ async def handle_callback_create(client: Client, query: CallbackQuery ):
                 USER_SUB = DEF_CREATE_USER(MESSAGE_CHATID , USERNAME , DATA_LIMIT , DATE_LIMIT , PROXIES_FINAL , INBOUND_FINAL)
                 if not "❌" in USER_SUB :
                     QRCODE_IMG = DEF_CREATE_QRCODE(USER_SUB)
-                    await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA_LIMIT , DATE_LIMIT) , reply_markup=ReplyKeyboardRemove())
-                    await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
+                    await client.send_photo(chat_id=MESSAGE_CHATID, photo=QRCODE_IMG, caption=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days </br></br> \n{USER_SUB} </br></b>")
+                    #await client.send_photo(chat_id=MESSAGE_CHATID , photo=QRCODE_IMG,caption=DEF_SEND_QR_TEXT(USER_SUB , USERNAME , DATA_LIMIT , DATE_LIMIT) , reply_markup=ReplyKeyboardRemove())
+                    #await client.send_message(chat_id=MESSAGE_CHATID , text=f"<b>✅ <code>{USERNAME}</code> | {DATA_LIMIT} GB | {DATE_LIMIT} Days</b>" , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
                 else :
                     await client.send_message(chat_id=MESSAGE_CHATID , text=USER_SUB , reply_markup=KEYBOARD_HOME , parse_mode=enums.ParseMode.HTML)
                     UPDATE_STEP = DEF_UPDATE_STEP(MESSAGE_CHATID,"None")
