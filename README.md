@@ -67,7 +67,7 @@ Ubuntu servers, and any responsibility for other setups is your own.
 Please use the following command to install on your server:
 
 ```
-cd && cd .. && rm -f holderbot.sh* || true && clear && wget https://raw.githubusercontent.com/erfjab/holderbot/main/holderbot.sh && chmod +x holderbot.sh && ./holderbot.sh
+cd && cd .. && rm -f holderbot.sh* || true && clear && wget https://raw.githubusercontent.com/sinamirtech/holderbot/main/holderbot.sh && chmod +x holderbot.sh && ./holderbot.sh
 ```
 
 # How to use the bot? (video) # 
