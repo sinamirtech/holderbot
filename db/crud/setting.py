@@ -1,67 +1,88 @@
 """
-This module provides functionality for managing settings in the application.
-
-It includes methods for upserting and retrieving settings from the database.
+This module provides functionality for managing application settings,
+including methods for updating and retrieving settings.
 """
 
+from typing import List
+
 from sqlalchemy.future import select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from db.base import get_db
 from db.models import Setting
-from models import SettingData, SettingUpsert, SettingKeys
+from models import SettingKeys
 
 
 class SettingManager:
-    """Manager class for handling settings operations."""
+    """Handles the application's settings management, ensuring a single settings record exists."""
 
     @staticmethod
-    async def upsert(setting_upsert: SettingUpsert) -> SettingData | None:
+    async def _get_or_create_settings(db: AsyncSession) -> Setting:
         """
-        Upsert a setting in the database.
-
-        If the setting exists and the value is None, it will be deleted.
-        If the setting does not exist, it will be created.
-
-        Args:
-            setting_upsert (SettingUpsert): The setting data to upsert.
-
-        Returns:
-            SettingData | None: The upserted setting data or None if deleted.
+        Helper method to get existing settings or create new ones if they don't exist.
         """
-        async with get_db() as db:
-            existing_setting = await db.execute(
-                select(Setting).where(Setting.key == setting_upsert.key)
-            )
-            setting = existing_setting.scalar_one_or_none()
+        result = await db.execute(select(Setting))
+        settings = result.scalar_one_or_none()
 
-            if setting:
-                if setting_upsert.value is None:
-                    await db.delete(setting)
-                    await db.commit()
-                    return None
-                setting.value = setting_upsert.value
-            else:
-                if setting_upsert.value is not None:
-                    setting = Setting(
-                        key=setting_upsert.key, value=setting_upsert.value
-                    )
-                    db.add(setting)
-
+        if not settings:
+            settings = Setting()
+            db.add(settings)
             await db.commit()
-            await db.refresh(setting)
-            return SettingData.from_orm(setting)
+            await db.refresh(settings)
+
+        return settings
 
     @staticmethod
-    async def get(key: SettingKeys) -> SettingData | None:
+    async def get(field: SettingKeys) -> bool:
         """
-        Retrieve a setting by its key.
-
-        Args:
-            key (SettingKeys): The key of the setting to retrieve.
-
-        Returns:
-            SettingData | None: The retrieved setting data or None if not found.
+        Retrieve the specified setting field, ensuring the settings record exists.
+        If the settings record does not exist, it will be created.
         """
         async with get_db() as db:
-            result = await db.execute(select(Setting).where(Setting.key == key))
-            setting = result.scalar_one_or_none()
-            return SettingData.from_orm(setting) if setting else None
+            settings = await SettingManager._get_or_create_settings(db)
+            return getattr(settings, field.value)
+
+    @staticmethod
+    async def toggle_field(field: SettingKeys) -> bool:
+        """
+        Toggle a boolean setting field and return its new value.
+        Ensures the settings record exists before toggling.
+        """
+        async with get_db() as db:
+            settings = await SettingManager._get_or_create_settings(db)
+
+            # Toggle the field's current value
+            current_value = getattr(settings, field.value)
+            new_value = not current_value
+            setattr(settings, field.value, new_value)
+
+            # Commit the change
+            db.add(settings)
+            await db.commit()
+
+            return new_value
+
+    @staticmethod
+    async def get_node_excluded() -> List[str]:
+        """
+        Retrieve the list of excluded node monitorings.
+        If settings don't exist, creates a new record with empty list.
+        """
+        async with get_db() as db:
+            settings = await SettingManager._get_or_create_settings(db)
+            return settings.node_excluded_monitorings or []
+
+    @staticmethod
+    async def update_node_excluded(excluded_nodes: List[str]) -> List[str]:
+        """
+        Update the list of excluded node monitorings.
+        Creates settings record if it doesn't exist.
+        """
+        async with get_db() as db:
+            settings = await SettingManager._get_or_create_settings(db)
+
+            settings.node_excluded_monitorings = excluded_nodes
+            await db.commit()
+            await db.refresh(settings)
+
+            return settings.node_excluded_monitorings
